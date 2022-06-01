@@ -6,7 +6,22 @@
         xmlns:local="clr-namespace:AutoBackupGUI.Views"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
+
+    <Window.Resources>
+        <ResourceDictionary>
+            <Style TargetType="TreeView">
+                <Setter Property="Margin" Value="5" />
+            </Style>
+        </ResourceDictionary>
+    </Window.Resources>
+    
     <Grid>
-        
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+
+        <TreeView Grid.Column="0" />
+        <TreeView Grid.Column="1" />
     </Grid>
 </Window>

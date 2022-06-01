@@ -1,12 +1,9 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 namespace AutoBackupGUI.ViewModels
 {
-    public class MainWindowViewModel
+    [INotifyPropertyChanged]
+    public partial class MainWindowViewModel
     {
     }
 }
