@@ -1,7 +1,5 @@
 using AutoBackupGUI.Models;
 
-using System.Text;
-
 namespace AutoBackupTests.Tests
 {
     // Tests:
