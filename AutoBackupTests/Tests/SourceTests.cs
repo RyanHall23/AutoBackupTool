@@ -2,6 +2,10 @@ using AutoBackupGUI.Models;
 
 namespace AutoBackupTests.Tests
 {
+    // Tests:
+    // - Should be able to add a source directory to a list of tracked sources
+    // - Should NOT be able to add a source directory that does not exist
+
     public class SourceTests
     {
         private static readonly string BaseDir = Path.GetFullPath(@".\Test\SourceTests");

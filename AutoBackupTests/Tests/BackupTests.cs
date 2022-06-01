@@ -4,6 +4,22 @@ using System.Text;
 
 namespace AutoBackupTests.Tests
 {
+    // Tests:
+    // - Init
+    //   - Should be able to add a backup location to a list of tracked backup locations
+    //   - Should NOT be able to add a backup location that does not exist
+    // - Parent directory checks
+    //   - Should be able to run a backup to copy files from a source directory to a single backup location
+    //   - Should be able to run a backup to copy files from a source directory to multiple backup locations
+    //   - Should be able to run a backup to copy files from multiple sources to a single backup location
+    //   - Should be able to run a backup to copy files from multiple sources to multiple backup locations
+    // - Sub-directory checks
+    //   - Should be able to run a backup to copy files from a source directory with sub-directories to a single backup location
+    //   - Should be able to run a backup to copy files from a source directory with sub-directories to multiple backup locations
+    // - Backup error tests
+    //   - Should NOT be able to run a backup if source directories are not set
+    //   - Should NOT be able to run a backup if backup locations are not set
+
     public class BackupTests
     {
         private static readonly string BaseDir = Path.GetFullPath(@".\Test\BackupTests");
@@ -219,49 +235,3 @@ namespace AutoBackupTests.Tests
         }
     }
 }
-
-// Tests:
-// - Init
-//   - Should be able to add a backup location to a list of tracked backup locations
-//   - Should NOT be able to add a backup location that does not exist
-// - Parent directory checks
-//   - Should be able to run a backup to copy files from a source directory to a single backup location
-//   - Should be able to run a backup to copy files from a source directory to multiple backup locations
-//   - Should be able to run a backup to copy files from multiple sources to a single backup location
-//   - Should be able to run a backup to copy files from multiple sources to multiple backup locations
-// - Sub-directory checks
-//   - Should be able to run a backup to copy files from a source directory with sub-directories to a single backup location
-//   - Should be able to run a backup to copy files from a source directory with sub-directories to multiple backup locations
-// - Backup error tests
-//   - Should NOT be able to run a backup if source directories are not set
-//   - Should NOT be able to run a backup if backup locations are not set
-
-// TASK: Backup locations tied to Source Directories
-// - each source should also have its own backup locations
-
-// BackupManager
-// - AddSource(source)
-//   - If `source` is null / does not exist then throw error
-//   - Create a new SourceDirectory object
-//     - DirName
-//     - FullPath
-//     - Parent (nullable --- If null then it is the topmost we care about, i.e. the backup folder will directly contain this directory)
-//     - SubDirs (IEnumerable<SourceDirectory>)
-//     - Files (IEnumerable<string>)
-// - AddBackup(backup)
-//   - If `backup` is null / does not exist then throw error
-//   - Add `backup` to list
-// - RunBackup()
-//   - foreach source in Sources
-//     - foreach backup in Backups
-//       - Copy contents (+ tracked directory) source->backup
-
-// Checking if backup worked:
-// - foreach backup
-//   - foreach source
-//     - VerifyBackup(backup, source)
-//
-// func VerifyBackup(backup, source)
-//   Assert(backup.Files == source.Files)
-//   foreach (subdir in source.SubDirs)
-//     VerifyBackup(backup, subdir)
