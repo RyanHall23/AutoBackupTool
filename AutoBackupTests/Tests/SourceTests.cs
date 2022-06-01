@@ -5,9 +5,11 @@ namespace AutoBackupTests.Tests
     // Tests:
     // - Should be able to add a source directory to a list of tracked sources
     // - Should NOT be able to add a source directory that does not exist
+    // - Should NOT be able to add a duplicate source directory
 
     public class SourceTests
     {
+        private static BackupManager BackupManager => BackupManager.Instance;
         private static readonly string BaseDir = Path.GetFullPath(@".\Test\SourceTests");
 
         private static readonly string SourceDir = Path.Combine(BaseDir, "source");
@@ -57,6 +59,19 @@ namespace AutoBackupTests.Tests
 
             // Assert
             Assert.DoesNotContain(nonExistentSource, BackupManager.Sources.Select(s => s.FullPath));
+        }
+        [Fact(DisplayName = "Should NOT be able to add a duplicate source directory")]
+        public void Test_AddingDuplicateSource()
+        {
+            // Arrange
+            CleanBeforeTest();
+            BackupManager.AddSource(Source1);
+
+            // Act
+            BackupManager.AddSource(Source1);
+
+            // Assert
+            Assert.Single(BackupManager.Sources);
         }
     }
 }

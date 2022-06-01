@@ -4,24 +4,38 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:AutoBackupGUI.Views"
+        xmlns:viewModels="clr-namespace:AutoBackupGUI.ViewModels"
+        xmlns:models="clr-namespace:AutoBackupGUI.Models"
         mc:Ignorable="d"
         Title="MainWindow" Height="450" Width="800">
 
+    <Window.DataContext>
+        <viewModels:MainWindowViewModel x:Name="ViewModel" />
+    </Window.DataContext>
+
     <Window.Resources>
         <ResourceDictionary>
-            <Style TargetType="TreeView">
-                <Setter Property="Margin" Value="5" />
-            </Style>
+            
         </ResourceDictionary>
     </Window.Resources>
     
     <Grid>
         <Grid.ColumnDefinitions>
-            <ColumnDefinition />
+            <ColumnDefinition/>
+            <ColumnDefinition Width="auto" />
             <ColumnDefinition />
         </Grid.ColumnDefinitions>
 
-        <TreeView Grid.Column="0" />
-        <TreeView Grid.Column="1" />
+        <DockPanel Grid.Column="0" Margin="5">
+            <Button DockPanel.Dock="Top" Content="Add Source" Command="{Binding AddSourceCommand}" />
+            <TreeView ItemsSource="{Binding Path=BackupManager.Sources}" />
+        </DockPanel>
+
+        <Button Grid.Column="1" Margin="5" Padding="5" Height="50" Content="Run Backup" Command="{Binding RunBackupCommand}" />
+
+        <DockPanel Grid.Column="2" Margin="5">
+            <Button DockPanel.Dock="Top" Content="Add Backup" Command="{Binding AddBackupCommand}" />
+            <TreeView ItemsSource="{Binding Path=BackupManager.Backups}" />
+        </DockPanel>
     </Grid>
 </Window>

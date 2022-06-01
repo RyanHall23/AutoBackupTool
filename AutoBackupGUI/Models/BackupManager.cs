@@ -1,65 +1,71 @@
-﻿using System;
+﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
+
+using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 
 namespace AutoBackupGUI.Models
 {
-    public class TargetDirectory
+    [ObservableObject]
+    public partial class BackupManager
     {
-        public string FullPath { get; }
-        public TargetDirectory? Parent { get; }
+        [ObservableProperty]
+        private ObservableCollection<TargetDirectory> sources;
+        [ObservableProperty]
+        private ObservableCollection<TargetDirectory> backups;
 
-        public string DirName => Path.GetFileName(this.FullPath) ?? string.Empty;
-        public IEnumerable<TargetDirectory> SubDirs => Directory.GetDirectories(this.FullPath).Select(subDir => new TargetDirectory(subDir, this));
-        public IEnumerable<string> Files => Directory.GetFiles(this.FullPath);
-
-        public TargetDirectory(string path, TargetDirectory? parent = null)
+        #region Singleton
+        private static BackupManager? instance;
+        public static BackupManager Instance
         {
-            this.FullPath = path;
-            this.Parent = parent;
-        }
-        public override string ToString()
-        {
-            string str = this.DirName;
-            TargetDirectory? parent = this.Parent;
-
-            while (parent != null)
+            get
             {
-                str = Path.Combine(parent.DirName, str);
-                parent = parent.Parent;
+                if (instance == null)
+                    instance = new BackupManager();
+                return instance;
             }
-            return str;
-        }
-    }
-
-    public class BackupManager
-    {
-        public static List<TargetDirectory> Sources { get; private set; } = new();
-        public static List<TargetDirectory> Backups { get; private set; } = new();
-
-        public static void Reset()
-        {
-            Sources = new();
-            Backups = new();
         }
 
-        public static void AddSource(string path)
+        private BackupManager()
         {
+            this.sources = new ObservableCollection<TargetDirectory>();
+            this.backups = new ObservableCollection<TargetDirectory>();
+
+            //this.AddSource(@"D:\Dev\~TESTING\source");
+            //this.AddBackup(@"D:\Dev\~TESTING\dest");
+        }
+        #endregion
+
+        public void Reset()
+        {
+            this.Sources = new();
+            this.Backups = new();
+        }
+
+        public void AddSource(string path)
+        {
+            if (this.Sources.Select(source => source.FullPath).Contains(path))
+                return;
+
             if (Directory.Exists(path))
-                Sources.Add(new TargetDirectory(path));
+                this.Sources.Add(new TargetDirectory(path));
         }
-        public static void AddBackup(string path)
+        public void AddBackup(string path)
         {
+            if (this.Backups.Select(backup => backup.FullPath).Contains(path))
+                return;
+
             if (Directory.Exists(path))
-                Backups.Add(new TargetDirectory(path));
+                this.Backups.Add(new TargetDirectory(path));
         }
 
-        public static void RunBackup()
+        public void RunBackup()
         {
-            if (Sources.Count == 0)
+            if (this.Sources.Count == 0)
                 throw new InvalidOperationException("Source directiories must be set before running a backup");
-            if (Backups.Count == 0)
+            if (this.Backups.Count == 0)
                 throw new InvalidOperationException("Backup locations must be set before running a backup");
 
             foreach (TargetDirectory backup in Backups)
