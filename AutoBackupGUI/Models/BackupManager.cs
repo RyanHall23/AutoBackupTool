@@ -1,7 +1,6 @@
 ﻿using Microsoft.Toolkit.Mvvm.ComponentModel;
 
 using System;
-using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
@@ -32,9 +31,6 @@ namespace AutoBackupGUI.Models
         {
             this.sources = new ObservableCollection<TargetDirectory>();
             this.backups = new ObservableCollection<TargetDirectory>();
-
-            //this.AddSource(@"D:\Dev\~TESTING\source");
-            //this.AddBackup(@"D:\Dev\~TESTING\dest");
         }
         #endregion
 
