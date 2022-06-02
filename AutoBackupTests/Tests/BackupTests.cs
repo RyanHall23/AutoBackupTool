@@ -1,13 +1,12 @@
 using AutoBackupGUI.Models;
 
-using System.Text;
-
 namespace AutoBackupTests.Tests
 {
     // Tests:
     // - Init
     //   - Should be able to add a backup location to a list of tracked backup locations
     //   - Should NOT be able to add a backup location that does not exist
+    //   - Should NOT be able to add a duplicate backup location
     // - Parent directory checks
     //   - Should be able to run a backup to copy files from a source directory to a single backup location
     //   - Should be able to run a backup to copy files from a source directory to multiple backup locations
@@ -22,6 +21,7 @@ namespace AutoBackupTests.Tests
 
     public class BackupTests
     {
+        private static BackupManager BackupManager => BackupManager.Instance;
         private static readonly string BaseDir = Path.GetFullPath(@".\Test\BackupTests");
 
         private static readonly string SourceDir = Path.Combine(BaseDir, "source");
@@ -109,6 +109,19 @@ namespace AutoBackupTests.Tests
 
             // Assert
             Assert.DoesNotContain(nonExistentSource, BackupManager.Backups.Select(s => s.FullPath));
+        }
+        [Fact(DisplayName = "Should NOT be able to add a duplicate backup location")]
+        public void Test_AddingDuplicateBackupLocation()
+        {
+            // Arrange
+            CleanBeforeTest();
+            BackupManager.AddBackup(Backup1);
+
+            // Act
+            BackupManager.AddBackup(Backup1);
+
+            // Assert
+            Assert.Single(BackupManager.Backups);
         }
 
         [Fact(DisplayName = "Should be able to run a backup to copy files from a source directory to a single backup location")]
