@@ -2,6 +2,7 @@
 
 using Microsoft.Toolkit.Mvvm.ComponentModel;
 using Microsoft.Toolkit.Mvvm.Input;
+using Microsoft.WindowsAPICodePack.Dialogs;
 
 using System;
 using System.Windows;
@@ -16,14 +17,18 @@ namespace AutoBackupGUI.ViewModels
         [ICommand]
         private void AddSource()
         {
-            // TODO: Open BrowseDialog and select a folder
-            BackupManager.AddSource(@"D:\Dev\~TESTING\source");
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                BackupManager.AddSource(dialog.FileName);
         }
         [ICommand]
         private void AddBackup()
         {
-            // TODO: Open BrowseDialog and select a folder
-            BackupManager.AddBackup(@"D:\Dev\~TESTING\dest");
+            var dialog = new CommonOpenFileDialog();
+            dialog.IsFolderPicker = true;
+            if (dialog.ShowDialog() == CommonFileDialogResult.Ok)
+                BackupManager.AddBackup(dialog.FileName);
         }
         [ICommand]
         private void RunBackup()
